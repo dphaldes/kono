@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Exec=kono run %f
+Name=Kono Launcher
+Type=Application
+Terminal=false
+NoDisplay=true
+Categories=Utility
+Icon=wine
+MimeType=application/x-ms-dos-executable;application/x-msi;

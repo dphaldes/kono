@@ -1,15 +1,29 @@
-use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
+mod arguments;
+mod paths;
+mod runner;
+
+use clap::Parser;
+
+use arguments::{Arguments, Command};
 
 fn main() {
-    let mut app = QGuiApplication::new();
-    let mut engine = QQmlApplicationEngine::new();
+    // initialize
 
-    if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/konossieur/src/qml/main.qml"));
-    }
+    // load config and defaults if present
 
-    // Start the app
-    if let Some(app) = app.as_mut() {
-        app.exec();
-    }
+    // checks paths and create folders if necessary
+    if let Err(err) = paths::ensure_kono_paths() {
+        println!("Error creating folders!\n{}", err);
+        std::process::exit(1);
+    };
+
+    // cli
+    let args = Arguments::parse();
+    println!("{:?}", args);
+
+    // act on arguments
+    match args.command {
+        Command::Run { prog: app } => runner::run(app),
+        _ => todo!(),
+    };
 }
