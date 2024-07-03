@@ -19,11 +19,8 @@ fn main() {
 
     // cli
     let args = Arguments::parse();
-    println!("{:?}", args);
 
-    // act on arguments
     match args.command {
         Command::Run { prog: app } => runner::run(app),
-        _ => todo!(),
     };
 }
