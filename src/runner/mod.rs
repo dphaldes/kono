@@ -1,9 +1,8 @@
 mod manifest;
 
-use std::{
-    fmt::write,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
+
+use dialog::DialogBox;
 
 use crate::{paths, runner::manifest::Manifest};
 
@@ -25,6 +24,10 @@ pub fn run(exe: String) {
     let manifest_path = exe_dir.join(format!("{}.kono.toml", exe_name));
     if !manifest_path.exists() {
         println!("Config not present");
+        dialog::Message::new("No manifest found.")
+            .title("Kono-Launch Error")
+            .show_with(dialog::backends::KDialog::new())
+            .expect("Dialog Error");
         return;
     }
 
