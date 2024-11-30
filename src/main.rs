@@ -1,13 +1,18 @@
 mod arguments;
+mod gui;
 mod paths;
 mod runner;
 
-use clap::Parser;
-
 use arguments::{Arguments, Command};
+use clap::Parser;
+use cxx_kde_frameworks::ki18n::{KLocalizedContext, KLocalizedString};
+use cxx_qt_lib::{QByteArray, QGuiApplication, QQmlApplicationEngine, QUrl};
 
 fn main() {
     // initialize
+    let mut qapplication = QGuiApplication::new();
+    let mut qml_engine = QQmlApplicationEngine::new();
+    KLocalizedString::set_application_domain(&QByteArray::from("kono"));
 
     // load config and defaults if present
 
@@ -20,7 +25,18 @@ fn main() {
     // cli
     let args = Arguments::parse();
 
-    match args.command {
-        Command::Run { prog: app } => runner::run(app),
-    };
+    if let Some(command) = args.command {
+        match command {
+            Command::Run { prog: app } => runner::run(app),
+        }
+
+        return;
+    }
+
+    if let Some(mut engine) = qml_engine.as_mut() {
+        KLocalizedContext::initialize_engine(engine.as_mut().as_qqmlengine());
+        engine.load(&QUrl::from("qrc:/qt/qml/kono/src/gui/qml/main.qml"));
+    }
+
+    qapplication.as_mut().map(|app| app.exec());
 }

@@ -86,5 +86,5 @@ fn launch_exe_with_wine(exe_path: PathBuf, prefix_path: PathBuf, runner_path: Pa
         .arg(exe_path)
         .env("WINEPREFIX", prefix_path)
         .spawn()
-        .expect("Erro: Failed to start executable");
+        .expect("Error: Failed to start executable");
 }

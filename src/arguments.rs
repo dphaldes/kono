@@ -4,7 +4,7 @@ use clap::{Args, Parser, Subcommand};
 #[command(name = "kono")]
 pub struct Arguments {
     #[clap(subcommand)]
-    pub command: Command,
+    pub command: Option<Command>,
 }
 
 #[derive(Debug, Subcommand)]
