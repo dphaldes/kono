@@ -1,12 +1,11 @@
 use std::{env, process::exit};
 
-pub const HOME: &str = "HOME";
-pub const XDG_DATA_PATH: &str = "XDG_DATA_PATH";
+const HOME: &str = "HOME";
+const XDG_DATA_PATH: &str = "XDG_DATA_PATH";
 
 pub fn ensure_kono_paths() -> std::io::Result<()> {
     std::fs::create_dir_all(data_dir())?;
-    std::fs::create_dir_all(package_dir())?;
-    std::fs::create_dir_all(runner_dir())?;
+    std::fs::create_dir_all(components_dir())?;
 
     Ok(())
 }
@@ -17,7 +16,7 @@ pub fn data_dir() -> String {
         Err(_) => match env::var(HOME) {
             Ok(path) => format!("{}/.local/share", path),
             Err(_) => {
-                println!("Error: Cannot get user $HOME");
+                eprintln!("Cannot get user $HOME");
                 exit(1);
             }
         },
@@ -25,10 +24,10 @@ pub fn data_dir() -> String {
     return format!("{}/kono", dir);
 }
 
-pub fn package_dir() -> String {
-    return format!("{}/packages", data_dir());
-}
+// pub fn prefix_dir() -> String {
+//     return format!("{}/prefix", data_dir());
+// }
 
-pub fn runner_dir() -> String {
-    return format!("{}/runner", data_dir());
+pub fn components_dir() -> String {
+    return format!("{}/components", data_dir());
 }
